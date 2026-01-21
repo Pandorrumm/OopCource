@@ -25,11 +25,14 @@ public class Range {
         this.to = to;
     }
 
-    public double getLength() {
-        return to - from;
-    }
+    public Range getIntersection(Range range){
+        double intersectionFrom = Math.max(this.from, range.from);
+        double intersectionTo = Math.min(this.to, range.to);
 
-    public boolean isInside(double number) {
-        return number >= from && number <= to;
+        if (intersectionFrom < intersectionTo){
+            return new Range(intersectionFrom, intersectionTo);
+        }
+
+        return null;
     }
 }

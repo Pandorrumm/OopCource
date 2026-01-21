@@ -2,47 +2,26 @@ package ru.nsk.pavlov.range_main;
 
 import ru.nsk.pavlov.range.Range;
 
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Range range = new Range(0, 10);
+        Range range1 = new Range(5, 10);
+        Range range2 = new Range(20, 30);
+        Range range3 = new Range(0, 5);
 
-        System.out.println("Enter the beginning number of the range:");
-        double from = scanner.nextDouble();
-
-        System.out.println("Enter the ending number of the range:");
-        double to = scanner.nextDouble();
-
-        System.out.println("Enter the number:");
-        double number = scanner.nextDouble();
-
-        Range range = new Range(from, to);
-
-        System.out.printf("Range length: %.3f%n", range.getLength());
-
-        printIsInsideNumberInfo(range, number);
-
-        System.out.println("Enter the new beginning number of the range:");
-        double newFrom = scanner.nextDouble();
-
-        System.out.println("Enter the new ending number of the range:");
-        double newTo = scanner.nextDouble();
-
-        range.setFrom(newFrom);
-        range.setTo(newTo);
-
-        System.out.println("The range has been redefined!");
-        System.out.printf("New range length: %.3f%n", range.getLength());
-
-        printIsInsideNumberInfo(range, number);
+        testIntersection(range, range1);
+        testIntersection(range1, range2);
+        testIntersection(range2, range3);
+        testIntersection(range, range3);
     }
 
-    public static void printIsInsideNumberInfo(Range range, double number) {
-        if (range.isInside(number)) {
-            System.out.println("Your number is in the range from " + range.getFrom() + " to " + range.getTo());
-        } else {
-            System.out.println("Your number is out of range from " + range.getFrom() + " to " + range.getTo());
-        }
+    public static void testIntersection(Range range1, Range range2){
+        Range intersection = range1.getIntersection(range2);
+        System.out.println("Intersection" + printRange(range1) + " and" +  printRange(range2) + " :" + (intersection != null ? printRange(intersection) : " null"));
     }
+
+    public static String printRange(Range range){
+       return  " (" + range.getFrom() + ", " +  range.getTo() + ")";
+    }
+
 }
