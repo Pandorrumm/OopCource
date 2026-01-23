@@ -8,6 +8,8 @@ public class Main {
         Range range1 = new Range(5, 10);
         Range range2 = new Range(20, 30);
         Range range3 = new Range(0, 5);
+        Range range4 = new Range(0, 20);
+        Range range5 = new Range(10, 40);
 
         System.out.println();
         System.out.println("Testing Intersection");
@@ -22,6 +24,13 @@ public class Main {
         testUnification(range1, range2);
         testUnification(range2, range3);
         testUnification(range, range3);
+
+        System.out.println();
+        System.out.println("Testing Difference");
+        testDifference(range, range1);
+        testDifference(range, range3);
+        testDifference(range1, range4);
+        testDifference(range5, range2);
     }
 
     public static void testIntersection(Range range1, Range range2) {
@@ -36,6 +45,18 @@ public class Main {
             System.out.println("Unification" + printRange(range1) + " and" + printRange(range2) + " - " + "One interval:" + printRange(unification[0]));
         } else if (unification.length == 2) {
             System.out.println("Unification" + printRange(range1) + " and" + printRange(range2) + " - " + "Two intervals:" + printRange(unification[0]) + ", " + printRange(unification[1]));
+        }
+    }
+
+    public static void testDifference(Range range1, Range range2) {
+        Range[] difference = range1.getDifference(range2);
+
+        if (difference.length == 0) {
+            System.out.println("Difference" + printRange(range1) + " and" + printRange(range2) + " - " + "There are no intervals");
+        } else if (difference.length == 1) {
+            System.out.println("Difference" + printRange(range1) + " and" + printRange(range2) + " - " + "One interval:" + printRange(difference[0]));
+        } else if (difference.length == 2) {
+            System.out.println("Difference" + printRange(range1) + " and" + printRange(range2) + " - " + "Two interval:" + printRange(difference[0]) + ", " + printRange(difference[1]));
         }
     }
 

@@ -49,4 +49,31 @@ public class Range {
             return new Range[]{new Range(unificationFrom, unificationTo)};
         }
     }
+
+    public Range[] getDifference(Range range) {
+        if (range.from <= this.from && range.to >= this.to) {
+            return new Range[0];
+        }
+
+        if (this.from < range.from && this.to > range.to) {
+            return new Range[]{
+                    new Range(this.from, range.from),
+                    new Range(range.to, this.to)
+            };
+        }
+
+        if (range.from <= this.from && range.to < this.to) {
+            return new Range[]{new Range(range.to, this.to)};
+        }
+
+        if (range.from > this.from && range.to >= this.to) {
+            return new Range[]{new Range(this.from, range.from)};
+        }
+
+        if (this.to <= range.from || range.to <= this.from) {
+            return new Range[]{new Range(this.from, this.to)};
+        }
+
+        return new Range[0];
+    }
 }
