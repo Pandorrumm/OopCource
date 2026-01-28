@@ -85,6 +85,7 @@ public class Range {
         return new Range[0];
     }
 
+    @Override
     public String toString() {
         return "(" + from + ", " + to + ")";
     }

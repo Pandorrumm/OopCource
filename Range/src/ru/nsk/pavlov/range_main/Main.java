@@ -35,16 +35,16 @@ public class Main {
 
     public static void testIntersection(Range range1, Range range2) {
         Range intersection = range1.getIntersection(range2);
-        System.out.println("Intersection " + range1 + " and " + range2 + " : " + (intersection != null ? intersection.toString() : " null"));
+        System.out.println("Intersection " + range1 + " and " + range2 + " : " + (intersection != null ? intersection : " null"));
     }
 
     public static void testUnion(Range range1, Range range2) {
         Range[] union = range1.getUnion(range2);
 
         if (union.length == 1) {
-            System.out.println("Unification " + range1 + " and " + range2 + " - First range: " + union[0].toString());
+            System.out.println("Union " + range1 + " and " + range2 + " - One range: " + union[0]);
         } else if (union.length == 2) {
-            System.out.println("Unification " + range1 + " and " + range2 + " - Two range: " + union[0].toString() + ", " + union[1].toString());
+            System.out.println("Union " + range1 + " and " + range2 + " - Two ranges: " + union[0] + ", " + union[1]);
         }
     }
 
@@ -54,9 +54,9 @@ public class Main {
         if (difference.length == 0) {
             System.out.println("Difference " + range1 + " and " + range2 + " - There are no ranges");
         } else if (difference.length == 1) {
-            System.out.println("Difference " + range1 + " and " + range2 + " - First range: " + difference[0].toString());
+            System.out.println("Difference " + range1 + " and " + range2 + " - One range: " + difference[0]);
         } else if (difference.length == 2) {
-            System.out.println("Difference " + range1 + " and " + range2 + " - Two range: " + difference[0].toString() + ", " + difference[1].toString());
+            System.out.println("Difference " + range1 + " and " + range2 + " - Two ranges: " + difference[0] + ", " + difference[1]);
         }
     }
 }
