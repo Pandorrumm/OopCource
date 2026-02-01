@@ -1,10 +1,14 @@
-package ru.nsk.pavlov.shapes.shapes;
+package ru.nsk.pavlov.shapes;
 
 public class Square implements Shape {
-    private double sideLength;
+    private final double sideLength;
 
     public Square(double sideLength) {
         this.sideLength = sideLength;
+    }
+
+    public double getSideLength() {
+        return sideLength;
     }
 
     @Override
@@ -28,29 +32,35 @@ public class Square implements Shape {
     }
 
     @Override
-    public String getTitle() {
-        return "Square";
-    }
-
-    @Override
     public String toString() {
-        return "Width: " + getWidth() + System.lineSeparator() + "Height: " + getHeight() + System.lineSeparator() + "Perimeter: " + getPerimeter() + System.lineSeparator() + "Area: " + getArea();
+        return "Shape: Square. " +
+                "Width: " + getWidth() +
+                ", Height: " + getHeight() +
+                ", Perimeter: " + getPerimeter() +
+                ", Area: " + getArea();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (obj == null || getClass() != obj.getClass()) {
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
         Square square = (Square) obj;
-        return Double.compare(square.sideLength, sideLength) == 0;
+        return sideLength == square.sideLength;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(sideLength);
+        final int prime = 37;
+        int result = 1;
+
+        result = prime * result + Double.hashCode(sideLength);
+
+        return result;
     }
 }

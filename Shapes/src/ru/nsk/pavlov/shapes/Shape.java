@@ -1,4 +1,4 @@
-package ru.nsk.pavlov.shapes.shapes;
+package ru.nsk.pavlov.shapes;
 
 public interface Shape {
     double getWidth();
@@ -8,6 +8,4 @@ public interface Shape {
     double getArea();
 
     double getPerimeter();
-
-    String getTitle();
 }

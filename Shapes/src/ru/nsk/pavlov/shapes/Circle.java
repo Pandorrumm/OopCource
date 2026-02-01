@@ -1,12 +1,14 @@
-package ru.nsk.pavlov.shapes.shapes;
-
-import java.util.Objects;
+package ru.nsk.pavlov.shapes;
 
 public class Circle implements Shape {
-    private double radius;
+    private final double radius;
 
     public Circle(double radius) {
         this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class Circle implements Shape {
 
     @Override
     public double getArea() {
-        return Math.PI * Math.pow(radius, 2);
+        return Math.PI * radius * radius;
     }
 
     @Override
@@ -30,29 +32,35 @@ public class Circle implements Shape {
     }
 
     @Override
-    public String getTitle() {
-        return "Circle";
-    }
-
-    @Override
     public String toString() {
-        return "Width: " + getWidth() + System.lineSeparator() + "Height: " + getHeight() + System.lineSeparator() + "Perimeter: " + getPerimeter() + System.lineSeparator() + "Area: " + getArea();
+        return "Shape: Circle. " +
+                "Width: " + getWidth() +
+                ", Height: " + getHeight() +
+                ", Perimeter: " + getPerimeter() +
+                ", Area: " + getArea();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (obj == null || getClass() != obj.getClass()) {
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
         Circle circle = (Circle) obj;
-        return Double.compare(circle.radius, radius) == 0;
+        return radius == circle.radius;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(radius);
+        final int prime = 37;
+        int result = 1;
+
+        result = prime * result + Double.hashCode(radius);
+
+        return result;
     }
 }
