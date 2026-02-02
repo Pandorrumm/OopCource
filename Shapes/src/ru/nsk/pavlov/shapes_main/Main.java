@@ -1,7 +1,7 @@
 package ru.nsk.pavlov.shapes_main;
 
-import ru.nsk.pavlov.comparators.ShapeAreaReverseComparator;
-import ru.nsk.pavlov.comparators.ShapePerimeterReverseComparator;
+import ru.nsk.pavlov.shapes_comparators.ShapeAreaReverseComparator;
+import ru.nsk.pavlov.shapes_comparators.ShapePerimeterReverseComparator;
 import ru.nsk.pavlov.shapes.*;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class Main {
         sortByPerimeterDescending(shapes);
 
         System.out.println();
-        System.out.println("The figure with the second largest perimeter:");
+        System.out.println("The shape with the second largest perimeter:");
         System.out.println(shapes[1]);
     }
 

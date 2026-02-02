@@ -1,4 +1,4 @@
-package ru.nsk.pavlov.comparators;
+package ru.nsk.pavlov.shapes_comparators;
 
 import ru.nsk.pavlov.shapes.Shape;
 
