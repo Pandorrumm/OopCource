@@ -3,7 +3,7 @@ package ru.nsk.pavlov.vector;
 import java.util.Arrays;
 
 public class Vector {
-    private double[] components;
+    private final double[] components;
 
     public Vector(int n) {
         if (n <= 0) {
@@ -58,28 +58,34 @@ public class Vector {
     }
 
     public Vector addingVector(Vector vector) {
-        if (components.length != vector.components.length) {
-            throw new IllegalArgumentException("Vectors of different dimensions");
-        }
+        int maxLength = Math.max(components.length, vector.components.length);
+        double[] result = new double[maxLength];
 
-        double[] result = new double[components.length];
+        double temp1;
+        double temp2;
 
-        for (int i = 0; i < vector.components.length; i++) {
-            result[i] = components[i] + vector.components[i];
+        for (int i = 0; i < maxLength; i++) {
+            temp1 = i < components.length ? components[i] : 0;
+            temp2 = i < vector.components.length ? vector.components[i] : 0;
+
+            result[i] = temp1 + temp2;
         }
 
         return new Vector(result);
     }
 
     public Vector subtractionVector(Vector vector) {
-        if (components.length != vector.components.length) {
-            throw new IllegalArgumentException("Vectors of different dimensions");
-        }
+        int maxLength = Math.max(components.length, vector.components.length);
+        double[] result = new double[maxLength];
 
-        double[] result = new double[components.length];
+        double temp1;
+        double temp2;
 
-        for (int i = 0; i < vector.components.length; i++) {
-            result[i] = components[i] - vector.components[i];
+        for (int i = 0; i < maxLength; i++) {
+            temp1 = i < components.length ? components[i] : 0;
+            temp2 = i < vector.components.length ? vector.components[i] : 0;
+
+            result[i] = temp1 - temp2;
         }
 
         return new Vector(result);
@@ -116,17 +122,96 @@ public class Vector {
     }
 
     public double getComponentByIndex(int index) {
-        if (index < 0) {
-            throw new IllegalArgumentException("Dimension of the array must be >= 0");
-        }
-
-        if (index >= components.length) {
+        if (index < 0 || index >= components.length) {
             throw new IllegalArgumentException("The index goes beyond the array");
         }
+
         return components[index];
     }
 
     public void setComponentByIndex(int index, double component) {
+        if (index < 0 || index >= components.length) {
+            throw new IllegalArgumentException("The index goes beyond the array");
+        }
+
         components[index] = component;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Vector vector = (Vector) obj;
+        return Arrays.equals(components, vector.components);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 37;
+        int hash = 1;
+
+        for (double component : components) {
+            hash = prime * hash + Double.hashCode(component);
+        }
+
+        return hash;
+    }
+
+    public static Vector addingTwoVectors(Vector vector1, Vector vector2) {
+        int maxLength = Math.max(vector1.components.length, vector2.components.length);
+        double[] result = new double[maxLength];
+
+        double temp1;
+        double temp2;
+
+        for (int i = 0; i < maxLength; i++) {
+            temp1 = i < vector1.components.length ? vector1.components[i] : 0;
+            temp2 = i < vector2.components.length ? vector2.components[i] : 0;
+
+            result[i] = temp1 + temp2;
+        }
+
+        return new Vector(result);
+    }
+
+    public static Vector subtractionTwoVectors(Vector vector1, Vector vector2) {
+        int maxLength = Math.max(vector1.components.length, vector2.components.length);
+        double[] result = new double[maxLength];
+
+        double temp1;
+        double temp2;
+
+        for (int i = 0; i < maxLength; i++) {
+            temp1 = i < vector1.components.length ? vector1.components[i] : 0;
+            temp2 = i < vector2.components.length ? vector2.components[i] : 0;
+
+            result[i] = temp1 - temp2;
+        }
+
+        return new Vector(result);
+    }
+
+    public static double dotProduct(Vector vector1, Vector vector2) {
+        int maxLength = Math.max(vector1.components.length, vector2.components.length);
+
+        double temp1;
+        double temp2;
+
+        double result = 0;
+
+        for (int i = 0; i < maxLength; i++) {
+            temp1 = i < vector1.components.length ? vector1.components[i] : 0;
+            temp2 = i < vector2.components.length ? vector2.components[i] : 0;
+
+            result += temp1 * temp2;
+        }
+
+        return result;
     }
 }
