@@ -10,7 +10,7 @@ public class Main {
         Vector vector4 = new Vector(new double[]{1, 2, 3, 4, 5});
         Vector vector5 = new Vector(new double[]{2, 2, 2, 2, 2});
 
-        System.out.println("Vector length " + vector4 + " : " + vector4.getVectorLength());
+        System.out.println("Vector length " + vector4 + " : " + vector4.getLength());
 
         System.out.println();
         System.out.println("Add " + vector2 + " to " + vector1);
@@ -18,7 +18,7 @@ public class Main {
         System.out.println("Sum: " + vector1);
 
         System.out.println();
-        System.out.println("Adding vectors " + vector1 + " and " + vector3 + ": " + Vector.getAdditionVectors(vector1, vector3));
+        System.out.println("Adding vectors " + vector1 + " and " + vector3 + ": " + Vector.getSum(vector1, vector3));
 
         System.out.println();
         System.out.println("Subtract vector " + vector3 + " from vector " + vector2);
@@ -26,7 +26,7 @@ public class Main {
         System.out.println("Difference: " + vector2);
 
         System.out.println();
-        System.out.println("Subtraction vectors " + vector2 + " and " + vector3 + ": " + Vector.getDifferenceVectors(vector2, vector3));
+        System.out.println("Subtraction vectors " + vector2 + " and " + vector3 + ": " + Vector.getDifference(vector2, vector3));
 
         System.out.println();
         System.out.println("Multiply vector " + vector5 + " by a scalar " + 2);

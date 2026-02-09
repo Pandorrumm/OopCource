@@ -43,12 +43,13 @@ public class Vector {
 
         stringBuilder.append('{');
 
-        String separator = "";
-
         for (double component : components) {
-            stringBuilder.append(separator);
             stringBuilder.append(component);
-            separator = ", ";
+            stringBuilder.append(", ");
+        }
+
+        if (components.length > 0) {
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         }
 
         stringBuilder.append('}');
@@ -60,13 +61,16 @@ public class Vector {
         int size = Math.max(components.length, vector.components.length);
 
         if (size > components.length) {
-            components = Arrays.copyOf(components, size);
-        }
+            double[] newComponents = Arrays.copyOf(components, size);
 
-        double[] otherComponents = size > vector.components.length ? Arrays.copyOf(vector.components, size) : vector.components;
-
-        for (int i = 0; i < size; i++) {
-            components[i] = components[i] + otherComponents[i];
+            for (int i = 0; i < vector.components.length; i++) {
+                newComponents[i] += vector.components[i];
+            }
+            components = newComponents;
+        } else {
+            for (int i = 0; i < vector.components.length; i++) {
+                components[i] += vector.components[i];
+            }
         }
     }
 
@@ -74,13 +78,17 @@ public class Vector {
         int size = Math.max(components.length, vector.components.length);
 
         if (size > components.length) {
-            components = Arrays.copyOf(components, size);
-        }
+            double[] newComponents = Arrays.copyOf(components, size);
 
-        double[] otherComponents = size > vector.components.length ? Arrays.copyOf(vector.components, size) : vector.components;
+            for (int i = 0; i < vector.components.length; i++) {
+                newComponents[i] -= vector.components[i];
+            }
 
-        for (int i = 0; i < size; i++) {
-            components[i] = components[i] - otherComponents[i];
+            components = newComponents;
+        } else {
+            for (int i = 0; i < vector.components.length; i++) {
+                components[i] -= vector.components[i];
+            }
         }
     }
 
@@ -96,14 +104,14 @@ public class Vector {
         }
     }
 
-    public double getVectorLength() {
-        double sumOfSquares = 0;
+    public double getLength() {
+        double squaresSum = 0;
 
         for (double component : components) {
-            sumOfSquares += component * component;
+            squaresSum += component * component;
         }
 
-        return Math.sqrt(sumOfSquares);
+        return Math.sqrt(squaresSum);
     }
 
     public double getComponentByIndex(int index) {
@@ -141,24 +149,24 @@ public class Vector {
         return Arrays.hashCode(components);
     }
 
-    public static Vector getAdditionVectors(Vector vector1, Vector vector2) {
+    public static Vector getSum(Vector vector1, Vector vector2) {
         Vector result = new Vector(vector1);
         result.add(vector2);
         return result;
     }
 
-    public static Vector getDifferenceVectors(Vector vector1, Vector vector2) {
+    public static Vector getDifference(Vector vector1, Vector vector2) {
         Vector result = new Vector(vector1);
         result.subtract(vector2);
         return result;
     }
 
     public static double getDotProduct(Vector vector1, Vector vector2) {
-        int minLength = Math.min(vector1.components.length, vector2.components.length);
+        int minSize = Math.min(vector1.components.length, vector2.components.length);
 
         double result = 0;
 
-        for (int i = 0; i < minLength; i++) {
+        for (int i = 0; i < minSize; i++) {
             result += vector1.components[i] * vector2.components[i];
         }
 
