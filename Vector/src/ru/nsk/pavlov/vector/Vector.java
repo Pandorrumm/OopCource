@@ -37,6 +37,10 @@ public class Vector {
         return components.length;
     }
 
+    public double[] getComponents() {
+        return components;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -56,7 +60,9 @@ public class Vector {
     }
 
     public void add(Vector vector) {
-        components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
+        if (components.length < vector.components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
+        }
 
         for (int i = 0; i < vector.components.length; i++) {
             components[i] += vector.components[i];
@@ -64,7 +70,9 @@ public class Vector {
     }
 
     public void subtract(Vector vector) {
-        components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
+        if (components.length < vector.components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
+        }
 
         for (int i = 0; i < vector.components.length; i++) {
             components[i] -= vector.components[i];
