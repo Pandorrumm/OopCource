@@ -37,10 +37,6 @@ public class Vector {
         return components.length;
     }
 
-    public double[] getComponents() {
-        return components;
-    }
-
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
