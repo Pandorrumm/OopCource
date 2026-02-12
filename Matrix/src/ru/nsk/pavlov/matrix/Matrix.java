@@ -2,9 +2,6 @@ package ru.nsk.pavlov.matrix;
 
 import ru.nsk.pavlov.vector.Vector;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 public class Matrix {
     private Vector[] rows;
 
@@ -60,7 +57,13 @@ public class Matrix {
         rows = new Vector[vectors.length];
 
         for (int i = 0; i < vectors.length; i++) {
-            rows[i] = new Vector(size, vectors[i].getComponents());
+            double[] components = new double[size];
+
+            for (int j = 0; j < vectors[i].getSize(); j++) {
+                components[j] = vectors[i].getComponentByIndex(j);
+            }
+
+            rows[i] = new Vector(components);
         }
     }
 
@@ -95,7 +98,7 @@ public class Matrix {
         double[] column = new double[rows.length];
 
         for (int i = 0; i < rows.length; i++) {
-            column[i] = rows[i].getComponents()[index];
+            column[i] = rows[i].getComponentByIndex(index);
         }
 
         return new Vector(column);
@@ -111,7 +114,7 @@ public class Matrix {
             double[] columns = new double[rowCount];
 
             for (int j = 0; j < rowCount; j++) {
-                columns[j] = rows[j].getComponents()[i];
+                columns[j] = rows[j].getComponentByIndex(i);
             }
 
             transposedVectors[i] = new Vector(columns);
@@ -122,13 +125,13 @@ public class Matrix {
 
     public void multiplyByScalar(double scalar) {
         for (int i = 0; i < rows.length; i++) {
-            double[] components = rows[i].getComponents();
+            double[] newComponents = new double[rows[i].getSize()];
 
-            for (int j = 0; j < components.length; j++) {
-                components[j] *= scalar;
+            for (int j = 0; j < rows[i].getSize(); j++) {
+                newComponents[j] = rows[i].getComponentByIndex(j) * scalar;
             }
 
-            rows[i] = new Vector(components);
+            rows[i] = new Vector(newComponents);
         }
     }
 
@@ -153,33 +156,32 @@ public class Matrix {
         double determinant = 0;
 
         for (int i = 0; i < matrix.rows.length; i++) {
-            determinant += Math.pow(-1, i) * matrix.getRow(0).getComponentByIndex(i) * getDeterminant(getMinor(matrix, 0, i));
+            determinant += Math.pow(-1, i) * matrix.getRow(0).getComponentByIndex(i) * getDeterminant(getMinor(matrix, i));
         }
 
         return determinant;
     }
 
-    private Matrix getMinor(Matrix matrix, int row, int column) {
+    private Matrix getMinor(Matrix matrix, int column) {
         Vector[] minors = new Vector[matrix.rows.length - 1];
 
         int minorsIndex = 0;
 
         for (int i = 0; i < matrix.rows.length; i++) {
-            if (i == row) {
+            if (i == 0) {
                 continue;
             }
 
-            double[] currentComponents = matrix.getRow(i).getComponents();
-            double[] newRowComponents = new double[matrix.rows.length - 1];
+            double[] newRowComponents = new double[matrix.getRow(i).getSize() - 1];
 
             int newColumnIndex = 0;
 
-            for (int j = 0; j < matrix.rows.length; j++) {
+            for (int j = 0; j < matrix.getRow(i).getSize(); j++) {
                 if (j == column) {
                     continue;
                 }
 
-                newRowComponents[newColumnIndex++] = currentComponents[j];
+                newRowComponents[newColumnIndex++] = matrix.getRow(i).getComponentByIndex(j);
             }
 
             minors[minorsIndex++] = new Vector(newRowComponents);
@@ -194,14 +196,23 @@ public class Matrix {
 
         stringBuilder.append('{');
 
-        for (int i = 0; i < rows.length; i++) {
-            stringBuilder.append(Arrays.toString(rows[i].getComponents()));
+        for (Vector row : rows) {
+            stringBuilder.append('{');
 
-            if (i != rows.length - 1) {
-                stringBuilder.append(", ");
+            for (int j = 0; j < row.getSize(); j++) {
+                stringBuilder
+                        .append(row.getComponentByIndex(j))
+                        .append(", ");
             }
+
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+
+            stringBuilder
+                    .append('}')
+                    .append(", ");
         }
 
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         stringBuilder.append('}');
 
         return stringBuilder.toString();
@@ -215,7 +226,7 @@ public class Matrix {
         for (int i = 0; i < rows.length; i++) {
             double sum = 0;
 
-            for (int j = 0; j < rows[i].getComponents().length; j++) {
+            for (int j = 0; j < rows[i].getSize(); j++) {
                 sum += rows[i].getComponentByIndex(j) * vector.getComponentByIndex(j);
             }
 
@@ -224,10 +235,65 @@ public class Matrix {
     }
 
     public void add(Matrix matrix) {
+        if (matrix.rows.length != rows.length || matrix.rows[0].getSize() != rows[0].getSize()) {
+            throw new IllegalArgumentException("The matrices have incompatible sizes: " + matrix.rows.length + " and " + rows.length +
+                    " оr " + matrix.rows[0].getSize() + " and " + rows[0].getSize());
+        }
 
+        for (int i = 0; i < rows.length; i++) {
+            for (int j = 0; j < rows[i].getSize(); j++) {
+                rows[i].setComponentByIndex(j, rows[i].getComponentByIndex(j) + matrix.rows[i].getComponentByIndex(j));
+            }
+        }
     }
 
     public void subtract(Matrix matrix) {
+        if (matrix.rows.length != rows.length || matrix.rows[0].getSize() != rows[0].getSize()) {
+            throw new IllegalArgumentException("The matrices have incompatible sizes: " + matrix.rows.length + " and " + rows.length +
+                    " оr " + matrix.rows[0].getSize() + " and " + rows[0].getSize());
+        }
 
+        for (int i = 0; i < rows.length; i++) {
+            for (int j = 0; j < rows[i].getSize(); j++) {
+                rows[i].setComponentByIndex(j, rows[i].getComponentByIndex(j) - matrix.rows[i].getComponentByIndex(j));
+            }
+        }
+    }
+
+    public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
+        Matrix result = new Matrix(matrix1);
+        result.add(matrix2);
+        return result;
+    }
+
+    public static Matrix getDifference(Matrix matrix1, Matrix matrix2) {
+        Matrix result = new Matrix(matrix1);
+        result.subtract(matrix2);
+        return result;
+    }
+
+    public static Matrix getMultiply(Matrix matrix1, Matrix matrix2) {
+        if (matrix1.rows[0].getSize() != matrix2.rows.length)
+            throw new IllegalArgumentException("Incompatible matrix sizes for multiplication " + matrix1.rows[0].getSize() + " and " + matrix2.rows.length);
+
+        Vector[] resultVectors = new Vector[matrix1.rows.length];
+
+        for (int i = 0; i < matrix1.rows.length; i++) {
+            double[] rowResult = new double[matrix2.rows[0].getSize()];
+
+            for (int j = 0; j < matrix2.rows[0].getSize(); j++) {
+                double sum = 0;
+
+                for (int k = 0; k < matrix1.rows[0].getSize(); k++) {
+                    sum += matrix1.rows[i].getComponentByIndex(k) * matrix2.rows[k].getComponentByIndex(j);
+                }
+
+                rowResult[j] = sum;
+            }
+
+            resultVectors[i] = new Vector(rowResult);
+        }
+
+        return new Matrix(resultVectors);
     }
 }
